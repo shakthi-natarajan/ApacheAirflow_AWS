@@ -1,0 +1,566 @@
+---
+Metadata:
+  TemplateId: "arn:aws:cloudformation:us-east-1:637423568043:generatedTemplate/fcad1408-a046-421f-8c74-d4e7dc364f1d"
+Resources:
+  EC2VolumeAttachment00vol0169f403a6dea46e400KuAYL:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::VolumeAttachment"
+    DeletionPolicy: "Delete"
+    Properties:
+      InstanceId: "i-06b44540cf36c4469"
+      VolumeId: "vol-0169f403a6dea46e4"
+      Device: "/dev/sda1"
+  CloudFrontOriginRequestPolicy00775133bc15f249f9abeaafb2e0bf67d200gMCjk:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "all"
+        Comment: "Policy for Elemental MediaTailor Origin"
+        HeadersConfig:
+          HeaderBehavior: "whitelist"
+          Headers:
+          - "origin"
+          - "access-control-request-headers"
+          - "x-forwarded-for"
+          - "access-control-request-method"
+          - "user-agent"
+        CookiesConfig:
+          CookieBehavior: "none"
+        Name: "Managed-Elemental-MediaTailor-PersonalizedManifests"
+  CloudWatchAlarm00BudgetAlarm004v6P9:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudWatch::Alarm"
+    DeletionPolicy: "Delete"
+    Properties:
+      ComparisonOperator: "GreaterThanThreshold"
+      TreatMissingData: "missing"
+      Dimensions:
+      - Value: "USD"
+        Name: "Currency"
+      Period: 21600
+      EvaluationPeriods: 1
+      Namespace: "AWS/Billing"
+      OKActions: []
+      AlarmActions:
+      - Ref: "SNSTopic00DefaultCloudWatchAlarmsTopic00StfkM"
+      MetricName: "EstimatedCharges"
+      ActionsEnabled: true
+      AlarmName: "Budget-Alarm"
+      Statistic: "Maximum"
+      InsufficientDataActions: []
+      DatapointsToAlarm: 1
+      Threshold: 1
+  EC2KeyPair00airflowec2project100ySgaq:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::KeyPair"
+    DeletionPolicy: "Delete"
+    Properties:
+      KeyName: "airflow-ec2-project1"
+      KeyType: "rsa"
+      PublicKeyMaterial: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCio4i8I5pnkI9L4ALHPauuZci4fX1T3L77JgWWlZQoTImmfQuvtc0EkLjOLHl6Kw3pKslCI66ewO/m5z5Cu47vlgORsf9bwz8EwMaJTW01Me0ZuPUXYskmNHkFMeEoW5DiiBqqatNhsmCPvnMZABb2LnZIgX5Bsu6CAenNQAnZKywcafGXY65VBXLyiMe3lhuiY+XWOnFgUi8xOMv2cVwBd0KvXT/KIuQMrQywzRnNo+OhaiqY5sOEmfrl+dxT5tfm3TM8pytNZ0e3IWqVtSv0IJtKgnhhZJojS6B5zADBQLySOR7hLJhJ7LEjS70yPiL/T2q4+Txy43zOBa35lyWd\
+        \ airflow-ec2-project1\n"
+      Tags: []
+  CloudFrontOriginRequestPolicy00acba4595bd2849b8b9fe13317c0390fa00fVd9k:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "none"
+        Comment: "Policy to forward user-agent and referer headers to origin"
+        HeadersConfig:
+          HeaderBehavior: "whitelist"
+          Headers:
+          - "referer"
+          - "user-agent"
+        CookiesConfig:
+          CookieBehavior: "none"
+        Name: "Managed-UserAgentRefererHeaders"
+  EC2SecurityGroup00sg0100f0630a3ac0e8100hU69B:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::SecurityGroup"
+    DeletionPolicy: "Delete"
+    Properties:
+      GroupDescription: "launch-wizard-3 created 2024-03-17T18:29:58.173Z"
+      GroupName: "launch-wizard-3"
+      VpcId:
+        Ref: "EC2VPC00vpc06c342509f0d6020800hym1A"
+      SecurityGroupIngress:
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "tcp"
+        FromPort: 80
+        ToPort: 80
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "-1"
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "tcp"
+        FromPort: 22
+        ToPort: 22
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "tcp"
+        FromPort: 443
+        ToPort: 443
+      SecurityGroupEgress:
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "-1"
+  IAMRole00ec2s3airflowrole00z6wah:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+      - "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+      MaxSessionDuration: 3600
+      RoleName: "ec2-s3-airflow-role"
+      Description: "Allows EC2 instances to call AWS services on your behalf."
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "ec2.amazonaws.com"
+  EC2InternetGateway00igw0604edb909e0a332b00WBjaG:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::InternetGateway"
+    DeletionPolicy: "Delete"
+    Properties:
+      Tags: []
+  CloudFrontOriginRequestPolicy00b689b0a853d040abbaf268738e2966ac006csdX:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "all"
+        Comment: "Policy to forward all parameters in viewer requests except for the\
+          \ Host header"
+        HeadersConfig:
+          HeaderBehavior: "allExcept"
+          Headers:
+          - "host"
+        CookiesConfig:
+          CookieBehavior: "all"
+        Name: "Managed-AllViewerExceptHostHeader"
+  EC2Route00rtb0523f05b04591951f00rAs2D:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Route"
+    DeletionPolicy: "Delete"
+    Properties:
+      RouteTableId:
+        Ref: "EC2RouteTable00rtb0523f05b04591951f00C1o0e"
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId:
+        Ref: "EC2InternetGateway00igw0604edb909e0a332b00WBjaG"
+      VpcEndpointId: "igw-0604edb909e0a332b"
+  EC2Volume00vol0169f403a6dea46e400oEd9v:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Volume"
+    DeletionPolicy: "Delete"
+    Properties:
+      MultiAttachEnabled: false
+      SnapshotId: "snap-057fda6c9eb1d88ec"
+      VolumeType: "gp2"
+      Encrypted: false
+      Size: 8
+      AutoEnableIO: true
+      AvailabilityZone: "us-east-1b"
+      Iops: 100
+      Tags: []
+  EC2KeyPair00Airflowec2keypair00KIOEB:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::KeyPair"
+    DeletionPolicy: "Delete"
+    Properties:
+      KeyName: "Airflow-ec2-keypair"
+      KeyType: "rsa"
+      PublicKeyMaterial: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZv+73Cms9Lbyb7Lw98QuAHTsmtyG7JJd+WKoOcBCfXzgTW44Zz0Nv0JmDiWr2Z6BHFskJthVxaNehpQCnjAi6TurQz0Tb0lClH7+4sWF/d52paKAsySK+GyJCVzfT9GTZ07oq4WruSknJsFd1ppMYbI6tw0mrxk5NRhMwgRpR5rC0sWRKInZK5PSq+ocW20FRByeJzM9gUfndhgrC+fnAlBmmh3JNXDnngbH49O5eU72CI7Kwcamec1O+plJSQ0C+DW9eprMxz+hBmaMUWXW48B6Q6v4F4kSVYy/KWr3hZVHnNazapC5Bu69gt1qOgmjd2Sgy8XCaEyTxqVd5FnIL\
+        \ Airflow-ec2-keypair\n"
+      Tags: []
+  EC2Subnet00subnet03ae0fd266577ee13001aDfo:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId: "vpc-06c342509f0d60208"
+      MapPublicIpOnLaunch: true
+      EnableDns64: false
+      AvailabilityZoneId: "use1-az4"
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      CidrBlock: "172.31.16.0/20"
+      Ipv6Native: false
+      Tags: []
+  CloudFrontOriginRequestPolicy0088a5eaf42fd44709b370b4c650ea3fcf00GCCjl:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "none"
+        Comment: "Policy for S3 origin with CORS"
+        HeadersConfig:
+          HeaderBehavior: "whitelist"
+          Headers:
+          - "origin"
+          - "access-control-request-headers"
+          - "access-control-request-method"
+        CookiesConfig:
+          CookieBehavior: "none"
+        Name: "Managed-CORS-S3Origin"
+  EC2RouteTable00rtb0523f05b04591951f00C1o0e:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::RouteTable"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId:
+        Ref: "EC2VPC00vpc06c342509f0d6020800hym1A"
+  AthenaWorkGroup00primary00rkXdW:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::Athena::WorkGroup"
+    DeletionPolicy: "Delete"
+    Properties:
+      WorkGroupConfiguration:
+        RequesterPaysEnabled: false
+        EnforceWorkGroupConfiguration: false
+        EngineVersion:
+          SelectedEngineVersion: "AUTO"
+        PublishCloudWatchMetricsEnabled: false
+        ResultConfiguration: {}
+      State: "ENABLED"
+      Tags: []
+      Name: "primary"
+  CloudFrontCachePolicy00b2884449e4de46a7ac3670bc7f1ddd6d008RB4t:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Default policy when compression is disabled"
+        MinTTL: 1
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "none"
+          EnableAcceptEncodingBrotli: false
+          HeadersConfig:
+            HeaderBehavior: "none"
+          CookiesConfig:
+            CookieBehavior: "none"
+          EnableAcceptEncodingGzip: false
+        DefaultTTL: 86400
+        Name: "Managed-CachingOptimizedForUncompressedObjects"
+  CloudFrontCachePolicy000862726205a94f769dedb50ca2e3a84f001xwOz:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Policy for Elemental MediaPackage Origin"
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStrings:
+            - "aws.manifestfilter"
+            - "start"
+            - "end"
+            - "m"
+            QueryStringBehavior: "whitelist"
+          EnableAcceptEncodingBrotli: false
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "origin"
+          CookiesConfig:
+            CookieBehavior: "none"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 86400
+        Name: "Managed-Elemental-MediaPackage"
+  IAMInstanceProfile00ec2s3airflowrole00QXKsk:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::IAM::InstanceProfile"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/"
+      Roles:
+      - Ref: "IAMRole00ec2s3airflowrole00z6wah"
+      InstanceProfileName:
+        Ref: "IAMRole00ec2s3airflowrole00z6wah"
+  CloudFrontOriginRequestPolicy0033f36d7ef39646d990e052428a34d9dc00h7UWO:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "all"
+        Comment: "Policy to forward all parameters in viewer requests and all CloudFront\
+          \ headers as of June 2022"
+        HeadersConfig:
+          HeaderBehavior: "allViewerAndWhitelistCloudFront"
+          Headers:
+          - "CloudFront-Viewer-Time-Zone"
+          - "CloudFront-Viewer-Address"
+          - "CloudFront-Viewer-Country"
+          - "CloudFront-Is-IOS-Viewer"
+          - "CloudFront-Is-Tablet-Viewer"
+          - "CloudFront-Forwarded-Proto"
+          - "CloudFront-Viewer-Country-Name"
+          - "CloudFront-Is-Mobile-Viewer"
+          - "CloudFront-Is-SmartTV-Viewer"
+          - "CloudFront-Viewer-Country-Region"
+          - "CloudFront-Is-Android-Viewer"
+          - "CloudFront-Viewer-Country-Region-Name"
+          - "CloudFront-Viewer-City"
+          - "CloudFront-Viewer-Latitude"
+          - "CloudFront-Viewer-Longitude"
+          - "CloudFront-Viewer-Http-Version"
+          - "CloudFront-Viewer-Postal-Code"
+          - "CloudFront-Viewer-ASN"
+          - "CloudFront-Is-Desktop-Viewer"
+          - "CloudFront-Viewer-Metro-Code"
+          - "CloudFront-Viewer-TLS"
+        CookiesConfig:
+          CookieBehavior: "all"
+        Name: "Managed-AllViewerAndCloudFrontHeaders-2022-06"
+  SNSTopic00DefaultCloudWatchAlarmsTopic00StfkM:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::SNS::Topic"
+    DeletionPolicy: "Delete"
+    Properties:
+      FifoTopic: false
+      Subscription:
+      - Endpoint: "shakthinatrajan@gmail.com"
+        Protocol: "email"
+      ArchivePolicy: {}
+      TopicName: "Default_CloudWatch_Alarms_Topic"
+  EC2NetworkInterface00eni0a5fc5142c805f077002wnz9:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::NetworkInterface"
+    DeletionPolicy: "Delete"
+    Properties:
+      Description: ""
+      PrivateIpAddress: "172.31.19.100"
+      PrivateIpAddresses:
+      - PrivateIpAddress: "172.31.19.100"
+        Primary: true
+      SecondaryPrivateIpAddressCount: 0
+      Ipv6PrefixCount: 0
+      Ipv4Prefixes: []
+      Ipv4PrefixCount: 0
+      GroupSet:
+      - "sg-0100f0630a3ac0e81"
+      Ipv6Prefixes: []
+      SubnetId:
+        Ref: "EC2Subnet00subnet03ae0fd266577ee13001aDfo"
+      SourceDestCheck: true
+      InterfaceType: "interface"
+      Tags: []
+  CloudFrontCachePolicy00658327eaf89d4faba63d7e88639e58f600AlDf1:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Policy with caching enabled. Supports Gzip and Brotli compression."
+        MinTTL: 1
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "none"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "none"
+          CookiesConfig:
+            CookieBehavior: "none"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 86400
+        Name: "Managed-CachingOptimized"
+  CloudFrontCachePolicy004135ea2d6df844a39df34b5a84be39ad00scch2:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Policy with caching disabled"
+        MinTTL: 0
+        MaxTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "none"
+          EnableAcceptEncodingBrotli: false
+          HeadersConfig:
+            HeaderBehavior: "none"
+          CookiesConfig:
+            CookieBehavior: "none"
+          EnableAcceptEncodingGzip: false
+        DefaultTTL: 0
+        Name: "Managed-CachingDisabled"
+  EC2KeyPair00airflowonec200haXtX:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::KeyPair"
+    DeletionPolicy: "Delete"
+    Properties:
+      KeyName: "airflowonec2"
+      KeyType: "rsa"
+      PublicKeyMaterial: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCQcBuW9Bewl652bF2XCgkWasU3/pglw240UaSZXhdQyK/A8o07U6MReWuJJ7fLAThCwlbqmLsCzNDzxVXdrcLF+XLV+A8rDyNRa8GYWTYVZKjleBQLOZBH3B3kjLAiyuJZG4vvvoiD7KOrTh/S5CzO+6AsUysN0Mr+horln9TKMWVnnvJD08Nua5xkXfvA0E2UtHioSjgWpD8JBb4L15XEW1SzG2SgWg4pFMGZTsXluuWdNAhPe+8o5CaZhwBomeI24crtuUKCCWUhzptqC6LYafaxBdf+BCSzlTL8IxYWjluXxLlC/sJT/WX86MCXoR5jLGWxTC6YhB8zmofJR+9X\
+        \ airflowonec2\n"
+      Tags: []
+  EC2VPCDHCPOptionsAssociation00vpc06c342509f0d6020800PKgpY:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::VPCDHCPOptionsAssociation"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId:
+        Ref: "EC2VPC00vpc06c342509f0d6020800hym1A"
+      DhcpOptionsId:
+        Ref: "EC2DHCPOptions00dopt0506cd6d418ea0d8000VtzAW"
+  EC2Instance00i06b44540cf36c446900Zg2BO:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Instance"
+    DeletionPolicy: "Delete"
+    Properties:
+      Tenancy: "default"
+      SecurityGroups:
+      - "launch-wizard-3"
+      PrivateIpAddress: "172.31.19.100"
+      InstanceInitiatedShutdownBehavior: "stop"
+      CpuOptions:
+        ThreadsPerCore: 1
+        CoreCount: 1
+      BlockDeviceMappings:
+      - Ebs:
+          SnapshotId: "snap-057fda6c9eb1d88ec"
+          VolumeType: "gp2"
+          Iops: 100
+          VolumeSize: 8
+          Encrypted: false
+          DeleteOnTermination: true
+        DeviceName: "/dev/sda1"
+      AvailabilityZone: "us-east-1b"
+      PrivateDnsNameOptions:
+        EnableResourceNameDnsARecord: true
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      IamInstanceProfile:
+        Ref: "IAMInstanceProfile00ec2s3airflowrole00QXKsk"
+      SubnetId:
+        Ref: "EC2Subnet00subnet03ae0fd266577ee13001aDfo"
+      SecurityGroupIds:
+      - "sg-0100f0630a3ac0e81"
+      EbsOptimized: false
+      DisableApiTermination: false
+      KeyName: "Airflow-EC2-KeyPair"
+      SourceDestCheck: true
+      Volumes:
+      - VolumeId: "vol-0169f403a6dea46e4"
+        Device: "/dev/sda1"
+      PlacementGroupName: ""
+      VpcId: "vpc-06c342509f0d60208"
+      NetworkInterfaces:
+      - PrivateIpAddresses:
+        - PrivateIpAddress: "172.31.19.100"
+          Primary: true
+        SecondaryPrivateIpAddressCount: 0
+        DeviceIndex: "0"
+        GroupSet:
+        - Ref: "EC2SecurityGroup00sg0100f0630a3ac0e8100hU69B"
+        Ipv6Addresses: []
+        SubnetId:
+          Ref: "EC2Subnet00subnet03ae0fd266577ee13001aDfo"
+        AssociatePublicIpAddress: true
+        NetworkInterfaceId:
+          Ref: "EC2NetworkInterface00eni0a5fc5142c805f077002wnz9"
+        DeleteOnTermination: true
+      ImageId: "ami-080e1f13689e07408"
+      InstanceType: "t2.small"
+      Monitoring: false
+      Tags:
+      - Value: "Airflow-EC2-DE-project"
+        Key: "Name"
+      CreditSpecification:
+        CPUCredits: "standard"
+  EC2DHCPOptions00dopt0506cd6d418ea0d8000VtzAW:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::DHCPOptions"
+    DeletionPolicy: "Delete"
+    Properties:
+      DomainName: "ec2.internal"
+      DomainNameServers:
+      - "AmazonProvidedDNS"
+      Tags: []
+  CloudFrontOriginRequestPolicy0059781a5b390341f3afcbaf62929ccde1005Esoq:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "none"
+        Comment: "Policy for custom origin with CORS"
+        HeadersConfig:
+          HeaderBehavior: "whitelist"
+          Headers:
+          - "origin"
+        CookiesConfig:
+          CookieBehavior: "none"
+        Name: "Managed-CORS-CustomOrigin"
+  CloudFrontOriginRequestPolicy00216adef65c7f47e4b9895492eafa07d300inU2O:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "all"
+        Comment: "Policy to forward all parameters in viewer requests"
+        HeadersConfig:
+          HeaderBehavior: "allViewer"
+        CookiesConfig:
+          CookieBehavior: "all"
+        Name: "Managed-AllViewer"
+  CloudFrontCachePolicy002e54312d136d493c8eb9b001f22f67d2001e4Nu:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Policy for Amplify Origin"
+        MinTTL: 2
+        MaxTTL: 600
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "all"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "Authorization"
+            - "CloudFront-Viewer-Country"
+            - "Host"
+          CookiesConfig:
+            CookieBehavior: "all"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 2
+        Name: "Managed-Amplify"
+  EC2VPC00vpc06c342509f0d6020800hym1A:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::VPC"
+    DeletionPolicy: "Delete"
+    Properties:
+      CidrBlock: "172.31.0.0/16"
+      EnableDnsSupport: true
+      InstanceTenancy: "default"
+      EnableDnsHostnames: true
+      Tags: []
